@@ -4,23 +4,12 @@ import { debug } from "vitest-preview";
 
 import * as stories from "./Products.stories";
 import { describe, it, expect } from "vitest";
-import { InMemoryProductGateway } from "../../infrastructure/adapters/in-memory-product-gateway";
-import {
-  DependenciesContextProvider,
-  LayeringDemoDependencies,
-} from "../../context/context";
 
 const { Default } = composeStories(stories);
 
 describe("Assessment Component", () => {
-  const inMemoryProductGateway = new InMemoryProductGateway();
-
-  const layeringDemoDependencies: LayeringDemoDependencies = {
-    PRODUCT_GATEWAY: inMemoryProductGateway,
-  };
-
   it("should render the products component", async () => {
-    inMemoryProductGateway.feedWithApiProducts([
+    stories.inMemoryProductGateway.feedWithApiProducts([
       {
         _id: "651305c8b96ac5fa931ac0e6",
         name: "Globus",
@@ -38,11 +27,7 @@ describe("Assessment Component", () => {
         description: "Have fun gaming.",
       },
     ]);
-    render(
-      <DependenciesContextProvider dependencies={layeringDemoDependencies}>
-        <Default />
-      </DependenciesContextProvider>
-    );
+    render(<Default />);
 
     const productsContainer = screen.getByTestId("container");
     expect(productsContainer).toBeInTheDocument();
